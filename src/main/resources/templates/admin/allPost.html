@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="header::header-fragment"></header>
+
+<body class="hold-transition sidebar-mini">
+<style>
+    .ui-jqgrid tr.jqgrow td {
+        white-space: normal !important;
+        height: auto;
+        vertical-align: text-top;
+        padding-top: 2px;
+    }
+</style>
+<div class="wrapper">
+    <!-- 引入页面头header-fragment -->
+    <div th:replace="header::header-nav"></div>
+    <!-- 引入工具栏sidebar-fragment -->
+    <div th:replace="sidebar::sidebar-fragment(${path})"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <h6 class="m-0 font-weight-bold text-primary">User List</h6>
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">职位管理</h3>
+                    </div> <!-- /.card-body -->
+                    <div class="card-body">
+                        <div class="grid-btn">
+                            <a class="btn btn-success" th:href="@{/post/add}"><i
+                                    class="fa fa-plus"></i>&nbsp;新增
+                            </a>
+                            <input type="text" placeholder="关键字" id="keyword" class="form-control col-2">&nbsp;
+                            <button class="btn btn-info" onclick="search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索
+                            </button>
+                        </div>
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>职位名称</th>
+                                <th>职位简介</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="post:${positionList}">
+                                <td th:text="${post.postId}"></td>
+                                <td th:text="${post.postName}"></td>
+                                <td th:text="${post.postDescription}"></td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" th:href="@{/post/info/}+${post.postId}">编辑</a>
+                                    <a th:href="@{/post/delete/}+${post.postId}"
+                                       class="btn btn-sm btn-danger deleteBtn"
+                                       onclick="del()">
+                                        删除
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div><!-- /.card-body -->
+                </div>
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- 引入页脚footer-fragment -->
+    <div th:replace="footer::footer-fragment"></div>
+</div>
+
+<!-- jQuery -->
+<script th:src="@{/user/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/user/plugins/jQueryUI/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/user/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/user/dist/js/adminlte.min.js}"></script>
+</body>
+<script >
+    function del() {
+        if(!confirm("确认要删除？")){
+            window.event.returnValue = false;
+        }
+    }
+</script>
+</html>

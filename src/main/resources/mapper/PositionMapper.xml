@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.abb.oa.mapper.PostMapper">
+    <resultMap id="PostMap" type="cn.abb.oa.pojo.Post">
+        <result property="postId" column="postId"/>
+        <result property="postName" column="postName"/>
+        <result property="postDescription" column="postDescription"/>
+    </resultMap>
+
+    <insert id="addInfo" parameterType="cn.abb.oa.pojo.Post">
+        insert into post
+        set postId=#{postId},postName=#{postName},postDescription=#{postDescription}
+    </insert>
+
+    <delete id="deleteInfo" parameterType="long">
+        delete
+        from post
+        where postId=#{postId}
+    </delete>
+
+    <update id="updateInfo" parameterType="cn.abb.oa.pojo.Post">
+        update post
+        set postName=#{postName},postDescription=#{postDescription}
+        where postId=#{postId}
+    </update>
+
+    <select id="selectPositionById" parameterType="long" resultMap="PostMap">
+        select * from post where postId=#{postId}
+    </select>
+
+    <select id="selectPositionByName" parameterType="String" resultMap="PostMap">
+        select * from post where postName=#{postName}
+    </select>
+
+    <select id="selectAllPosition" resultMap="PostMap">
+        select * from post
+    </select>
+
+</mapper>

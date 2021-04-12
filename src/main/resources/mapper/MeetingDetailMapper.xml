@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.abb.oa.mapper.MeetingDetailMapper">
+    <resultMap id="MeetingDetailMap" type="cn.abb.oa.pojo.MeetingDetail">
+        <result property="meetingId" column="meetingId"/>
+        <result property="creatorId" column="creatorId"/>
+        <result property="participantId" column="participantId"/>
+        <association property="meeting"
+                     select="cn.abb.oa.mapper.MeetingMapper.selectMeetingById"
+                     column="meetingId"/>
+        <association property="creator"
+                     select="cn.abb.oa.mapper.UserMapper.selectDtoById"
+                     column="creatorId"/>
+        <association property="participant"
+                     select="cn.abb.oa.mapper.UserMapper.selectDtoById"
+                     column="participantId"/>
+    </resultMap>
+
+    <insert id="addMeetingDt" parameterType="cn.abb.oa.pojo.MeetingDetail">
+        insert into createmeeting
+        set meetingId=#{meetingId},creatorId=#{creatorId},participantId=#{participantId}
+    </insert>
+
+    <delete id="deleteMeetingDt" parameterType="long">
+        delete from createmeeting
+        where meetingId=#{meetingId}
+    </delete>
+
+    <update id="updateMeetingDt" parameterType="cn.abb.oa.pojo.MeetingDetail">
+        update createmeeting
+        set creatorId=#{creatorId},participantId=#{participantId}
+        where meetingId=#{meetingId}
+    </update>
+
+    <select id="selectAllMeetingDt" resultMap="MeetingDetailMap">
+        select * from createmeeting
+    </select>
+
+    <select id="selectAllMeetingDtByID" resultMap="MeetingDetailMap" parameterType="long">
+        select * from createmeeting where meetingId=#{meetingId}
+    </select>
+
+    <select id="selectMeetingDtByID" resultMap="MeetingDetailMap" parameterType="long">
+        select * from createmeeting where participantId=#{participantId}
+    </select>
+
+</mapper>

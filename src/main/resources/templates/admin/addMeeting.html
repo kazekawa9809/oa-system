@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="header::header-fragment"></header>
+<head>
+    <script>
+        function submitConfirm() {
+            if (!confirm("确认要修改？")) {
+                window.event.returnValue = false;
+            }
+        }
+    </script>
+</head>
+<body class="hold-transition sidebar-mini">
+<style>
+    .ui-jqgrid tr.jqgrow td {
+        white-space: normal !important;
+        height: auto;
+        vertical-align: text-top;
+        padding-top: 2px;
+    }
+</style>
+<div class="wrapper">
+    <!-- 引入页面头header-fragment -->
+    <div th:replace="header::header-nav"></div>
+    <!-- 引入工具栏sidebar-fragment -->
+    <div th:replace="sidebar::sidebar-fragment(${path})"></div>
+    <!-- Page Heading -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">会议管理</h3>
+                </div> <!-- /.card-body -->
+                <div class="card-body">
+                    <form class="updateUser" method="post" id="test_form" th:action="@{/meeting/addInfo}" >
+                        <div class="form-group">
+                            <p>会议标题</p>
+                            <input type="text" name="meetingTitle" class="form-control " id="meetingTitle" placeholder="Enter new meetingTitle"/>
+                        </div>
+                        <div class="form-group">
+                            <p>会议发起人</p>
+                            <input type="text" name="meetingCreator" class="form-control " id="meetingCreator"
+                                   th:value="${session.isAdmin}?${session.admin.adminName}:${session.user.userName}"
+                                   placeholder="Enter new meetingCreator" readonly/>
+
+
+                            <!--th:text="${session.isAdmin}==1?${session.admin.adminName}:${session.user.userName}"
+                            th:value="${session.isAdmin}==1?${session.admin.adminId}:${session.user.userId}"-->
+                        </div>
+                        <div class="form-group">
+                            <p>会议简介</p>
+                            <textarea name="meetingDescription" class="form-control " id="meetingDescription" placeholder="Enter new meetingDescription" ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <p>创建时间</p>
+                            <input readonly="readonly" type="text" name="meetingCreateTime" class="form-control " id="meetingCreateTime"
+                                   th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd HH:mm:ss')}"
+                                   placeholder="meetingCreateTime read only"/>
+                        </div>
+                        <div class="form-group">
+                            <p>开始时间（会议默认1小时结束，如需使用请继续预定会议室）</p>
+                            <input type="date" name="meetingStartDate" class="form-check-inline " id="meetingStartDate"/>
+                            <input type="time" name="meetingStartTime" class="form-check-inline " id="meetingStartTime"/>
+                        </div>
+                        <div class="form-group">
+                            <p>预约会议室</p>
+                            <input type="text" name="meetingRoom" class="form-control " id="meetingRoom" placeholder="Enter new meetingRoom"/>
+                        </div>
+                        <div class="form-group col-sm-9">
+                            <p>参加会议人员</p>
+                            <!--/*@thymesVar id="allUserDto" type="cn.abb.oa.controller.MeetingController"*/-->
+                            <!--<input type="checkbox" th:each="user:${allUserDto}"
+                            th:value="${user.userId}" th:text="${user.userName}"
+                            />-->
+                            <label th:each="user:${allUserDto}" class="check-box">
+                                <!--/*@thymesVar id="userName" type="cn.abb.oa.pojo.UserDto"*/-->
+                                <input type="checkbox" name="meetingParticipant" class="width:16px" id="userId" th:value="${user.userId}" th:text="${user.userName}"/>
+                            </label>
+                        </div>
+                        <input type="hidden" name="meetingId"/>
+                        <button type="submit" class="btn btn-primary  btn-block" onclick="submitConfirm()">提交</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+<!-- 引入页脚footer-fragment -->
+<div th:replace="footer::footer-fragment"></div>
+</div>
+
+<!-- jQuery -->
+<script th:src="@{/user/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/user/plugins/jQueryUI/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/user/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/user/dist/js/adminlte.min.js}"></script>
+</body>
+
+</html>

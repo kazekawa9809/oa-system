@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.abb.oa.mapper.DepartMapper">
+
+    <resultMap id="DepartMap" type="cn.abb.oa.pojo.Depart">
+        <result property="departId" column="departId"/>
+        <result property="departName" column="departName"/>
+        <result property="departTel" column="departTel"/>
+        <result property="departDescription" column="departDescription"/>
+        <result property="departLocation" column="departLocation"/>
+        <result property="departUpperId" column="departUpperId"/>
+        <result property="departManagerId" column="departManagerId"/>
+    </resultMap>
+
+    <insert id="addInfo" parameterType="cn.abb.oa.pojo.Depart">
+        insert into depart
+        set
+        departId=#{departId},departName=#{departName},departTel=#{departTel},departDescription=#{departDescription},departLocation=#{departLocation}
+        ,departUpperId=#{departUpperId},departManagerId=#{departManagerId}
+    </insert>
+
+    <delete id="deleteInfo" parameterType="long">
+        delete
+        from depart
+        where departId = #{departId}
+    </delete>
+
+    <update id="updateInfo" parameterType="cn.abb.oa.pojo.Depart">
+        update depart
+        set
+        departName=#{departName},departTel=#{departTel},departDescription=#{departDescription},departLocation=#{departLocation}
+        ,departUpperId=#{departUpperId},departManagerId=#{departManagerId}
+        where departId=#{departId}
+    </update>
+
+    <select id="selectDepartById" parameterType="long" resultMap="DepartMap">
+        select * from depart where departId=#{departId}
+    </select>
+
+    <select id="selectDepartByName" parameterType="String" resultMap="DepartMap">
+        select * from depart where departName=#{departName}
+    </select>
+
+    <select id="selectAllDepart" resultMap="DepartMap">
+        select * from depart
+    </select>
+
+</mapper>

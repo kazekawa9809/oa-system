@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="header::header-fragment"></header>
+<body class="hold-transition sidebar-mini">
+<style>
+    .ui-jqgrid tr.jqgrow td {
+        white-space: normal !important;
+        height: auto;
+        vertical-align: text-top;
+        padding-top: 2px;
+    }
+</style>
+<div class="wrapper">
+    <!-- 引入页面头header-fragment -->
+    <div th:replace="header::header-nav"></div>
+    <!-- 引入工具栏sidebar-fragment -->
+    <div th:replace="sidebar::sidebar-fragment(${path})"></div>
+    <!-- Page Heading -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">职位管理</h3>
+                </div> <!-- /.card-body -->
+                <div class="card-body">
+                    <form class="updateUser" method="post" id="test_form"  >
+                        <div class="form-group">
+                            <p>会议标题</p>
+                            <!--/*@thymesVar id="updateMeetingInfo" type="cn.abb.oa.controller.MeetingController"*/-->
+                            <input readonly type="text" name="meetingTitle" class="form-control " id="meetingTitle" th:value="${meetingInfo.meetingTitle}" placeholder="Enter new meetingTitle"/>
+                        </div>
+                        <div class="form-group">
+                            <p>会议发起人</p>
+                            <!--/*@thymesVar id="creatorId" type="cn.abb.oa.controller.MeetingController"*/-->
+                            <input readonly type="text" name="meetingCreator" class="form-control " id="meetingCreator" th:value="${meetingDetails.get(0).creatorId}" placeholder="Enter new meetingCreator"/>
+                        </div>
+                        <div class="form-group">
+                            <p>会议简介</p>
+                            <textarea readonly name="meetingDescription" class="form-control " id="meetingDescription" th:text="${meetingInfo.meetingDescription}" placeholder="Enter new meetingDescription" ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <p>创建时间</p>
+                            <input type="text" readonly="readonly" name="meetingCreateTime" class="form-control " id="meetingCreateTime"
+                                   th:value="${meetingInfo.meetingCreateTime}" placeholder="Enter new meetingCreateTime"/>
+                        </div>
+                        <div class="form-group">
+                            <p>开始时间（会议默认1小时结束，如需使用请继续预定会议室）</p>
+                            <input type="text" readonly="readonly" name="meetingStartTime" class="form-control " id="meetingStartTime"
+                                   th:value="${meetingInfo.meetingStartTime}" placeholder="Enter new meetingStartTime"/>
+                        </div>
+                        <div class="form-group">
+                            <p>预约会议室</p>
+                            <input readonly type="text" name="meetingRoom" class="form-control " id="meetingRoom" th:value="${meetingInfo.meetingRoom}" placeholder="Enter new meetingRoom"/>
+                        </div>
+                        <div class="form-group col-sm-9">
+                            <p>参加会议人员</p>
+                            <!--/*@thymesVar id="allUserDto" type="cn.abb.oa.controller.MeetingController"*/-->
+                            <!--<input type="checkbox" th:each="user:${allUserDto}"
+                            th:value="${user.userId}" th:text="${user.userName}"
+                            />-->
+                            <label th:each="meetingDetail:${meetingDetails}" class="check-box" style="margin-right: 20px">
+                                <text name="meetingParticipant" class="form-control" id="meetingParticipant" th:text="${meetingDetail.participant.userName}" th:href="@{/user/info}+${meetingDetail.participant.userId}"/>
+                            </label>
+                        </div>
+                        <input type="hidden" name="meetingId" id="meetingId" th:value="${meetingInfo.meetingId}"/>
+                    </form>
+                    <a class="btn btn-primary  btn-block" th:href="@{/meeting/allInfo}" >返回</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+<!-- 引入页脚footer-fragment -->
+<div th:replace="footer::footer-fragment"></div>
+</div>
+
+<!-- jQuery -->
+<script th:src="@{/user/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/user/plugins/jQueryUI/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/user/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/user/dist/js/adminlte.min.js}"></script>
+</body>
+
+</html>

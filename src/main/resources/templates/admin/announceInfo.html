@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header th:replace="header::header-fragment"></header>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" th:href="@{/css/examples/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/editormd.css}" />
+</head>
+<body class="hold-transition sidebar-mini">
+<style>
+    .ui-jqgrid tr.jqgrow td {
+        white-space: normal !important;
+        height: auto;
+        vertical-align: text-top;
+        padding-top: 2px;
+    }
+</style>
+<div id="layout">
+    <!-- 引入页面头header-fragment -->
+    <div th:replace="header::header-nav"></div>
+    <!-- 引入工具栏sidebar-fragment -->
+    <div th:replace="sidebar::sidebar-fragment(${path})"></div>
+    <!-- Page Heading -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">公告管理</h3>
+                </div> <!-- /.card-body -->
+                <div class="card-body">
+                    <form class="updateAnnounce" id="test_form" th:action="@{/announce/allInfo}" >
+                        <div class="form-group">
+                            <h5>标题</h5>
+                            <input th:value="${updateAnnounceInfo.announceTitle}" type="text" name="announceTitle" class="form-control " id="announceTitle" placeholder="announceTitle" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <h5>创建者</h5>
+                            <input th:value="${updateAnnounceInfo.announceCreator}" type="text" name="announceCreator" class="form-control " id="announceCreator"  placeholder="announceCreator" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <h5>内容</h5>
+                            <div id="test-editormd">
+                                <textarea name="announceContent" id="announceContent" th:text="${updateAnnounceInfo.announceContent}" ></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="announceId"/>
+                        <div class="form-group">
+                            <button type="submit" class="btn float-right" style="margin-left: 5px;"   onclick="submitConfirm()">返回</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <!-- /.container-fluid -->
+
+    </div>
+        <!-- 引入页脚footer-fragment -->
+        <div th:replace="footer::footer-fragment"></div>
+        <script th:src="@{/js/examples/jquery.min.js}"></script>
+        <script th:src="@{/js/editormd.min.js}"></script>
+        <script type="text/javascript">
+            var testEditor;
+
+            $(function() {
+                testEditor = editormd.markdownToHTML("test-editormd", {
+                    height  : 640,
+                    syncScrolling : "single",
+                    path    : "../lib/",
+                    imageUpload : true,
+                    imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                    imageUploadURL : "/article/image/upload",
+                    toolbarIcons : function () {
+                        return ["undo","redo","|","bold","del","italic","quote","ucwords","uppercase","lowercase","|","h1","h2","h3","h4","h5","h6","|","list-ul","list-ol","hr","|","link","reference-link","image","code","preformatted-text","code-block","table","datetime","emoji","html-entities","pagebreak","|","goto-line","watch","preview","fullscreen","clear","search","|","help","info", "||", "publish"];
+                    },
+
+                    toolbarIconTexts: {
+                        publish: "<span bgcolor='gray'>发布</span>"
+                    },
+
+                });
+            });
+        </script>
+</div>
+
+<script th:src="@{/lib/marked.min.js}"></script>
+<script th:src="@{/lib/prettiful.min.js}"></script>
+<script th:src="@{/lib/raphael.min.js}"></script>
+<script th:src="@{/lib/flowchart.min.js}"></script>
+<script th:src="@{/lib/sequence-diagram.min.js}"></script>
+<script th:src="@{/lib/jquery.flowchart.min.js}"></script>
+<script th:src="@{/user/plugins/editor/editormd.js}"></script>
+
+<!-- jQuery -->
+<script th:src="@{/user/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/user/plugins/jQueryUI/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/user/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/user/dist/js/adminlte.min.js}"></script>
+</body>
+</html>

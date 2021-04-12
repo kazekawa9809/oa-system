@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="header::header-fragment"></header>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" th:href="@{/css/examples/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/editormd.css}" />
+    <script>
+        function submitConfirm() {
+            if (!confirm("确认要修改？")) {
+                window.event.returnValue = false;
+            }
+        }
+    </script>
+</head>
+<body class="hold-transition sidebar-mini">
+<style>
+    .ui-jqgrid tr.jqgrow td {
+        white-space: normal !important;
+        height: auto;
+        vertical-align: text-top;
+        padding-top: 2px;
+    }
+</style>
+<div class="layout">
+    <!-- 引入页面头header-fragment -->
+    <div th:replace="header::header-nav"></div>
+    <!-- 引入工具栏sidebar-fragment -->
+    <div th:replace="sidebar::sidebar-fragment(${path})"></div>
+    <!-- Page Heading -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">公告管理</h3>
+                </div> <!-- /.card-body -->
+                <div class="card-body">
+                    <form class="updateAnnounce" method="post" id="test_form" th:action="@{/announce/update}" >
+                        <div class="form-group">
+                            <p>标题</p>
+                            <input type="text" name="announceTitle" class="form-control " id="announceTitle" th:value="${updateAnnounceInfo.announceTitle}" placeholder="Enter new announceTitle" />
+                        </div>
+                        <div class="form-group">
+                            <p>创建者</p>
+                            <input type="text" name="announceCreator" class="form-control " id="announceCreator"  placeholder="Enter new announceCreator" th:value="${updateAnnounceInfo.announceCreator}"/>
+                        </div>
+                        <div class="form-control" id="test-editormd">
+                            <textarea style="display:none;" name="announceContent" id="announceContent" ></textarea>
+                        </div>
+                        <input type="hidden" name="announceId" th:value="${updateAnnounceInfo.announceId}"/>
+                        <div class="form-group">
+                            <button type="submit" class="btn float-right" style="margin-left: 5px;"   onclick="submitConfirm()">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+<!-- 引入页脚footer-fragment -->
+<div th:replace="footer::footer-fragment"></div>
+
+<script th:src="@{/js/examples/jquery.min.js}"></script>
+<script th:src="@{/js/editormd.min.js}"></script>
+<script type="text/javascript">
+    var testEditor;
+
+    $(function() {
+        testEditor = editormd("test-editormd", {
+            height  : 640,
+            syncScrolling : "single",
+            path    : "../lib/",
+            imageUpload : true,
+            imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL : "/article/image/upload",
+            toolbarIcons : function () {
+                return ["undo","redo","|","bold","del","italic","quote","ucwords","uppercase","lowercase","|","h1","h2","h3","h4","h5","h6","|","list-ul","list-ol","hr","|","link","reference-link","image","code","preformatted-text","code-block","table","datetime","emoji","html-entities","pagebreak","|","goto-line","watch","preview","fullscreen","clear","search","|","help","info", "||", "publish"];
+            },
+
+            toolbarIconTexts: {
+                publish: "<span bgcolor='gray'>发布</span>"
+            },
+
+            toolbarHandlers : {
+                publish: function (cm, icon, cursor, selection) {
+                    mdEditorForm.method = "post";
+                    mdEditorForm.action = "/article/publish";//提交至服务器的路径
+                    mdEditorForm.submit();
+                }
+            }
+        });
+
+        /*
+        // or
+        testEditor = editormd({
+            id      : "test-editormd",
+            width   : "90%",
+            height  : 640,
+            path    : "../lib/"
+        });
+        */
+    });
+</script>
+<!-- jQuery -->
+<script th:src="@{/user/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/user/plugins/jQueryUI/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/user/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/user/dist/js/adminlte.min.js}"></script>
+</body>
+
+</html>

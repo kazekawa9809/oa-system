@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.abb.oa.mapper.MeetingMapper">
+    <resultMap id="MeetingMap" type="cn.abb.oa.pojo.Meeting">
+        <result property="meetingId" column="meetingId"/>
+        <result property="meetingTitle" column="meetingTitle"/>
+        <result property="meetingDescription" column="meetingDescription"/>
+        <result property="meetingCreateTime" column="meetingCreateTime"/>
+        <result property="meetingStartTime" column="meetingStartTime"/>
+        <result property="meetingRoom" column="meetingRoom"/>
+    </resultMap>
+
+    <insert id="addInfo" parameterType="cn.abb.oa.pojo.Meeting">
+        insert into meeting
+        set
+        meetingId=#{meetingId},meetingTitle=#{meetingTitle},meetingDescription=#{meetingDescription},meetingCreateTime=#{meetingCreateTime}
+        ,meetingStartTime=#{meetingStartTime},meetingRoom=#{meetingRoom}
+    </insert>
+
+    <delete id="deleteInfo" parameterType="long">
+        delete
+        from meeting
+        where meetingId=#{meetingId}
+    </delete>
+
+    <update id="updateInfo" parameterType="cn.abb.oa.pojo.Meeting">
+        update meeting
+        set
+        meetingTitle=#{meetingTitle},meetingDescription=#{meetingDescription},meetingCreateTime=#{meetingCreateTime},meetingStartTime=#{meetingStartTime},meetingRoom=#{meetingRoom}
+        where meetingId=#{meetingId}
+    </update>
+
+    <select id="selectMeetingById" parameterType="long" resultMap="MeetingMap">
+        select * from meeting where meetingId=#{meetingId}
+    </select>
+
+    <select id="selectMeetingByStartTime" parameterType="String" resultMap="MeetingMap">
+        select * from meeting where meetingStartTime>#{meetingStartTime}
+    </select>
+
+    <select id="selectAllMeeting" resultMap="MeetingMap">
+        select * from meeting
+    </select>
+
+    <select id="maxId" resultType="long">
+        select max(meetingId) from meeting
+    </select>
+
+</mapper>

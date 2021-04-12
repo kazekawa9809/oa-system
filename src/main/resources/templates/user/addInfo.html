@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="header::header-fragment"></header>
+<head>
+    <script>
+        function submitConfirm() {
+            if (!confirm("确认要修改？")) {
+                window.event.returnValue = false;
+            }
+        }
+    </script>
+</head>
+<body class="hold-transition sidebar-mini">
+<style>
+    .ui-jqgrid tr.jqgrow td {
+        white-space: normal !important;
+        height: auto;
+        vertical-align: text-top;
+        padding-top: 2px;
+    }
+</style>
+<div class="wrapper">
+    <!-- 引入页面头header-fragment -->
+    <div th:replace="header::header-nav"></div>
+    <!-- 引入工具栏sidebar-fragment -->
+    <div th:replace="sidebar::sidebar-fragment(${path})"></div>
+    <!-- Page Heading -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">人员管理</h3>
+                </div> <!-- /.card-body -->
+                <div class="card-body">
+                    <form class="updateUser" method="post" id="test_form" th:action="@{/user/addInfo}" >
+                        <div class="form-group">
+                            <p>姓名</p>
+                            <input type="text" name="userName" class="form-control " id="userName" placeholder="Enter new userName">
+                        </div>
+                        <div class="form-group">
+                            <p>电话</p>
+                            <input type="text" name="userTel" class="form-control " id="userTel" placeholder="Enter new userTel">
+                        </div>
+                        <div class="form-group">
+                            <p>E-mail</p>
+                            <input type="text" name="userEmail" class="form-control " id="userEmail"  placeholder="Enter new userEmail">
+                        </div>
+                        <div class="form-group">
+                            <p>所在部门</p>
+                            <input type="text" name="userDepartId" class="form-control " id="userDepartId" placeholder="Enter new userDepartId">
+                        </div>
+                        <div class="form-group">
+                            <p>职位</p>
+                            <input type="text" name="userPositionId" class="form-control " id="userPositionId" placeholder="Enter new userPositionId">
+                        </div>
+                        <div class="form-group">
+                            <p>上级</p>
+                            <input type="text" name="userUpperId" class="form-control " id="userUpperId" placeholder="Enter new userUpperId">
+                        </div>
+                        <div class="form-group">
+                            <p>员工等级</p>
+                            <input type="text" name="userLevel" class="form-control " id="userLevel" placeholder="Enter new userLevel">
+                        </div>
+                        <input type="hidden" name="userPassword" />
+                        <input type="hidden" name="userId"/>
+                        <button type="submit" class="btn btn-primary  btn-block" onclick="submitConfirm()">提交</button>
+
+                    </form>
+                </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+    <!-- 引入页脚footer-fragment -->
+    <div th:replace="footer::footer-fragment"></div>
+</div>
+
+<!-- jQuery -->
+<script th:src="@{/user/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/user/plugins/jQueryUI/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/user/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/user/dist/js/adminlte.min.js}"></script>
+</body>
+
+</html>

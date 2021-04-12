@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="header::header-fragment"></header>
+<head>
+    <script>
+        function submitConfirm() {
+            if (!confirm("确认要修改？")) {
+                window.event.returnValue = false;
+            }
+        }
+    </script>
+</head>
+<body class="hold-transition sidebar-mini">
+<style>
+    .ui-jqgrid tr.jqgrow td {
+        white-space: normal !important;
+        height: auto;
+        vertical-align: text-top;
+        padding-top: 2px;
+    }
+</style>
+<div class="wrapper">
+    <!-- 引入页面头header-fragment -->
+    <div th:replace="header::header-nav"></div>
+    <!-- 引入工具栏sidebar-fragment -->
+    <div th:replace="sidebar::sidebar-fragment(${path})"></div>
+    <!-- Page Heading -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">职位管理</h3>
+                </div> <!-- /.card-body -->
+                <div class="card-body">
+                    <form class="updateUser" method="post" id="test_form" th:action="@{/depart/addInfo}" >
+                        <div class="form-group">
+                            <p>部门名称</p>
+                            <input type="text" name="departName" class="form-control " id="departName" placeholder="Enter new departName"/>
+                        </div>
+                        <div class="form-group">
+                            <p>部门电话</p>
+                            <input type="text" name="departTel" class="form-control " id="departTel" placeholder="Enter new departTel" />
+                        </div>
+                        <div class="form-group">
+                            <p>部门简介</p>
+                            <textarea name="departDescription" class="form-control " id="departDescription" placeholder="Enter new departDescription"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <p>所在地址</p>
+                            <input type="text" name="departLocation" class="form-control " id="departLocation" placeholder="Enter new departLocation" />
+                        </div>
+                        <div class="form-group">
+                            <p>上级部门</p>
+                            <input type="text" name="departUpperId" class="form-control " id="departUpperId" placeholder="Enter new departUpperId"/>
+                        </div>
+                        <div class="form-group">
+                            <p>主管ID</p>
+                            <input type="text" name="departManagerId" class="form-control " id="departManagerId" placeholder="Enter new departManagerId" />
+                        </div>
+                        <input type="hidden" name="departId"/>
+                        <button type="submit" class="btn btn-primary  btn-block" onclick="submitConfirm()">提交</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+<!-- 引入页脚footer-fragment -->
+<div th:replace="footer::footer-fragment"></div>
+</div>
+
+<!-- jQuery -->
+<script th:src="@{/user/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/user/plugins/jQueryUI/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/user/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/user/dist/js/adminlte.min.js}"></script>
+</body>
+
+</html>

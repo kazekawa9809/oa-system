@@ -1,0 +1,1 @@
+select u.userId,u.userName,d.departName from user u left join depart d on u.userDepartId = d.departId

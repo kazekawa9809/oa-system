@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.abb.oa.mapper.UserMapper">
+    <resultMap id="UserMap" type="cn.abb.oa.pojo.User">
+        <result property="userId" column="userId"/>
+        <result property="userName" column="userName"/>
+        <result property="userTel" column="userTel"/>
+        <result property="userEmail" column="userEmail"/>
+        <result property="userPassword" column="userPassword"/>
+        <result property="userDepartId" column="userDepartId"/>
+        <result property="userPositionId" column="userPositionId" />
+        <result property="userUpperId" column="userUpperId" />
+        <result property="userLevel" column="userLevel" />
+        <association property="depart"
+                     select="cn.abb.oa.mapper.DepartMapper.selectDepartById"
+                     column="userDepartId" />
+        <association property="post"
+                     select="cn.abb.oa.mapper.PostMapper.selectPositionById"
+                     column="userPositionId"/>
+    </resultMap>
+
+    <resultMap id="UserDtoMap" type="cn.abb.oa.pojo.UserDto">
+        <result property="userId" column="userId"/>
+        <result property="userName" column="userName"/>
+
+    </resultMap>
+
+
+
+    <insert id="addUser" parameterType="cn.abb.oa.pojo.User">
+        insert into user
+        set userName=#{userName},userTel=#{userTel},userEmail=#{userEmail},
+            userPassword=#{userPassword},userDepartId=#{userDepartId},
+            userPositionId=#{userPositionId},userUpperId=#{userUpperId},
+            userLevel=#{userLevel}
+    </insert>
+
+    <delete id="deleteUserById" parameterType="long">
+        delete
+        from user
+        where userId = #{userId}
+    </delete>
+
+    <update id="updateUser" parameterType="cn.abb.oa.pojo.User">
+        update user
+        set userName=#{userName},userTel=#{userTel},userEmail=#{userEmail},
+            userPassword=#{userPassword},userDepartId=#{userDepartId},
+            userPositionId=#{userPositionId},userUpperId=#{userUpperId},
+            userLevel=#{userLevel}
+        where userId=#{userId}
+    </update>
+
+    <update id="updateUserPrvt" parameterType="cn.abb.oa.pojo.User">
+        update user set userPassword=#{userPassword},userTel=#{userTel},
+                        userEmail=#{userEmail}
+        where userId=#{userId}
+    </update>
+
+    <update id="updateUserByAdmin" parameterType="cn.abb.oa.pojo.User">
+        update user set userPassword=#{userPassword},userTel=#{userTel},
+                        userEmail=#{userEmail},userPassword=#{userPassword},
+                        userPositionId=#{userPositionId},userUpperId=#{userUpperId}
+        where userId=#{userId}
+    </update>
+
+    <update id="updateUserLevel" parameterType="cn.abb.oa.pojo.User">
+        update user set
+            userLevel=#{userLevel}
+        where userId=#{userId}
+    </update>
+
+    <select id="selectAllUser" resultMap="UserMap">
+        select * from user
+    </select>
+
+    <select id="selectUserById" parameterType="long" resultMap="UserMap">
+        select * from user where userId=#{userId}
+    </select>
+
+    <select id="selectUserByEmail" parameterType="String" resultMap="UserMap">
+        select * from user where userEmail=#{userEmail}
+    </select>
+
+    <select id="selectUserByLevel" parameterType="int" resultMap="UserMap">
+        select * from user where userLevel=#{userLevel}
+    </select>
+
+    <select id="login" parameterType="String" resultMap="UserMap">
+        select * from user where userEmail = #{userEmail} and userPassword = #{userPassword}
+    </select>
+
+    <select id="selectByDepart" parameterType="long" resultMap="UserMap">
+        select * from user where userDepartId = #{userDepartId}
+    </select>
+
+    <select id="selectDepartNameByUser" resultMap="UserMap">
+        select u.userId,u.userName,d.departName
+        from user u left join depart d on u.userDepartId = d.departId
+    </select>
+
+    <select id="selectPositionNameByUser" resultMap="UserMap">
+        select u.userId,u.userName,p.postName
+        from user u left join post p on u.userPositionId = p.postId
+    </select>
+
+    <select id="selectDtoById" resultMap="UserDtoMap" parameterType="long">
+        select userId,userName from user where userId=#{userId}
+    </select>
+
+    <select id="selectDtoByName" resultMap="UserDtoMap" parameterType="long">
+        select userId,userName from user where userName=#{userName}
+    </select>
+
+    <select id="selectAllDto" resultMap="UserDtoMap">
+        select userId,userName from user
+    </select>
+
+</mapper>

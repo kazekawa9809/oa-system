@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header th:replace="header::header-fragment"></header>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" th:href="@{/css/examples/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/editormd.css}" />
+    <script>
+        function submitConfirm() {
+            if (!confirm("确认要修改？")) {
+                window.event.returnValue = false;
+            }
+        }
+    </script>
+</head>
+<body class="hold-transition sidebar-mini">
+<style>
+    .ui-jqgrid tr.jqgrow td {
+        white-space: normal !important;
+        height: auto;
+        vertical-align: text-top;
+        padding-top: 2px;
+    }
+</style>
+<div id="layout">
+    <!-- 引入页面头header-fragment -->
+    <div th:replace="header::header-nav"></div>
+    <!-- 引入工具栏sidebar-fragment -->
+    <div th:replace="sidebar::sidebar-fragment(${path})"></div>
+    <!-- Page Heading -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">公告管理</h3>
+                </div> <!-- /.card-body -->
+                <div class="card-body">
+                    <form class="updateAnnounce" method="post" id="test_form" th:action="@{/announce/addInfo}" >
+                        <div class="form-group">
+                            <p>标题</p>
+                            <input type="text" name="announceTitle" class="form-control " id="announceTitle" placeholder="Enter new announceTitle"/>
+                        </div>
+                        <div class="form-group">
+                            <p>创建者</p>
+                            <input type="text" name="announceCreator" class="form-control " id="announceCreator"  placeholder="Enter new announceCreator" />
+                        </div>
+                        <div class="form-control" id="test-editormd">
+                            <textarea style="display:none;" name="announceContent" id="announceContent"></textarea>
+                        </div>
+                        <input type="hidden" name="announceId"/>
+                        <div class="form-group">
+                            <button type="submit" class="btn float-right" style="margin-left: 5px;"   onclick="submitConfirm()">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+    <div class="content">
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="articleModal" tabindex="-1" role="dialog" aria-labelledby="articleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h6 class="modal-title" id="articleModalLabel">信息完善</h6>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <th:block th:if="${null == blog}">
+                                        <img id="blogCoverImage" src="/admin/dist/img/img-upload.png"
+                                             style="height: 64px;width: 64px;">
+                                    </th:block>
+                                    <th:block th:unless="${null == blog}">
+                                        <img id="blogCoverImage" th:src="${blog.blogCoverImage}"
+                                             style="width:160px ;height: 120px;display:block;">
+                                    </th:block>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button class="btn btn-info" style="margin-bottom: 5px;" id="uploadCoverImage">
+                                        <i class="fa fa-picture-o"></i>&nbsp;上传封面
+                                    </button>
+                                    <button class="btn btn-secondary" style="margin-bottom: 5px;"
+                                            id="randomCoverImage"><i
+                                            class="fa fa-random"></i>&nbsp;随机封面
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">文章状态:&nbsp;</label>
+                                <input name="blogStatus" type="radio" id="publish"
+                                       checked=true
+                                       th:checked="${null==blog||(null !=blog and null !=blog.blogStatus and blog.blogStatus==1)} ?true:false"
+                                       value="1"/>&nbsp;发布&nbsp;
+                                <input name="blogStatus" type="radio" id="draft" value="0"
+                                       th:checked="${null !=blog and null !=blog.blogStatus and blog.blogStatus==0} ?true:false"/>&nbsp;草稿&nbsp;
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">是否允许评论:&nbsp;</label>
+                                <input name="enableComment" type="radio" id="enableCommentTrue" checked=true
+                                       th:checked="${null==blog||(null !=blog and null !=blog.enableComment and blog.enableComment==0)} ?true:false"
+                                       value="0"/>&nbsp;是&nbsp;
+                                <input name="enableComment" type="radio" id="enableCommentFalse" value="1"
+                                       th:checked="${null !=blog and null !=blog.enableComment and blog.enableComment==1} ?true:false"/>&nbsp;否&nbsp;
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="saveButton">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal -->
+    </div>
+</div>
+
+<!-- 引入页脚footer-fragment -->
+<div th:replace="footer::footer-fragment"></div>
+<script th:src="@{/js/examples/jquery.min.js}"></script>
+<script th:src="@{/js/editormd.min.js}"></script>
+<script type="text/javascript">
+    var testEditor;
+
+    $(function() {
+        testEditor = editormd("test-editormd", {
+            height  : 640,
+            syncScrolling : "single",
+            path    : "../lib/",
+            imageUpload : true,
+            imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL : "/announce/image/upload",
+            toolbarIcons : function () {
+                return ["undo","redo","|","bold","del","italic","quote","ucwords","uppercase","lowercase","|","h1","h2","h3","h4","h5","h6","|","list-ul","list-ol","hr","|","link","reference-link","image","code","preformatted-text","code-block","table","datetime","emoji","html-entities","pagebreak","|","goto-line","watch","preview","fullscreen","clear","search","|","help","info", "||", "publish"];
+            }
+        });
+
+
+    });
+</script>
+
+<script th:src="@{/user/dist/js/edit.js}"></script>
+
+    <!-- jQuery -->
+<script th:src="@{/user/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/user/plugins/jQueryUI/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/user/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/user/dist/js/adminlte.min.js}"></script>
+</body>
+</html>
